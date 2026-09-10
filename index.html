@@ -1,1 +1,287 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>VECTRIX: Operational Warfare</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle, #1a1f29 0%, #0a0c10 100%);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+    /* Topbar */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background: rgba(18, 22, 31, 0.9);
+      border-bottom: 2px solid #ff7700;
+      box-shadow: 0 4px 15px rgba(255, 119, 0, 0.2);
+    }
+    .logo {
+      font-weight: 900;
+      font-size: 1.3rem;
+      letter-spacing: 2px;
+      color: #ff7700;
+      text-shadow: 0 0 10px rgba(255, 119, 0, 0.5);
+    }
+    .player-stats {
+      display: flex;
+      gap: 15px;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+    .rank-badge {
+      background: #2a3242;
+      padding: 4px 10px;
+      border-radius: 4px;
+      border: 1px solid #3d4960;
+      color: #00d2ff;
+    }
+    .coins { color: #ffd700; }
 
+    /* Navigation Tabs */
+    nav {
+      display: flex;
+      background: #12161f;
+      border-bottom: 1px solid #2a3242;
+    }
+    nav button {
+      flex: 1;
+      background: none;
+      border: none;
+      color: #7a8b9e;
+      font-weight: 700;
+      padding: 14px 0;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    nav button.active {
+      color: #fff;
+      background: #1d2433;
+      border-bottom: 3px solid #ff7700;
+    }
+
+    /* Content Screens */
+    .screen {
+      display: none;
+      flex: 1;
+      padding: 20px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .screen.active { display: flex; }
+
+    /* Buttons */
+    .btn-main {
+      background: linear-gradient(135deg, #ff7700 0%, #ff3300 100%);
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      font-weight: 900;
+      padding: 18px 0;
+      width: 100%;
+      max-width: 320px;
+      border-radius: 8px;
+      box-shadow: 0 6px 20px rgba(255, 119, 0, 0.4);
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .btn-sub {
+      background: #1e2533;
+      border: 1px solid #3d4960;
+      color: white;
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 14px 0;
+      width: 100%;
+      max-width: 320px;
+      border-radius: 8px;
+    }
+
+    /* Case Opening */
+    .case-card {
+      background: #141824;
+      border: 1px solid #2a3242;
+      border-radius: 12px;
+      padding: 20px;
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+    }
+    .roulette-container {
+      position: relative;
+      width: 100%;
+      height: 100px;
+      background: #090b10;
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 15px 0;
+      border: 2px solid #3d4960;
+    }
+    .marker {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 4px;
+      height: 100%;
+      background: #ff7700;
+      z-index: 5;
+      box-shadow: 0 0 10px #ff7700;
+    }
+    .roulette-track {
+      display: flex;
+      position: absolute;
+      left: 0;
+      top: 10px;
+      height: 80px;
+    }
+    .skin-item {
+      min-width: 80px;
+      height: 80px;
+      margin-right: 8px;
+      background: #1e2533;
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: bold;
+      border-bottom: 4px solid #fff;
+    }
+
+    /* Skin Rarities */
+    .rare-common { border-color: #b0c3d9; color: #b0c3d9; }
+    .rare-epic { border-color: #d32ce6; color: #d32ce6; }
+    .rare-arcane { border-color: #ffd700; color: #ffd700; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">VECTRIX</div>
+    <div class="player-stats">
+      <span class="rank-badge">PRATA I</span>
+      <span class="coins">🪙 <span id="coins">1000</span></span>
+    </div>
+  </header>
+
+  <nav>
+    <button class="active" onclick="tab('jogar', this)">JOGAR</button>
+    <button onclick="tab('caixas', this)">CAIXAS</button>
+    <button onclick="tab('inventario', this)">INVENTÁRIO</button>
+  </nav>
+
+  <!-- JOGAR -->
+  <div id="screen-jogar" class="screen active">
+    <a href="game3d.html" style="width: 100%; text-align: center;"><button class="btn-main">MODO TREINO 3D</button></a>
+    <button class="btn-sub" onclick="alert('Buscando servidores competitivos 5v5...')">COMPETITIVO (RANKED)</button>
+  </div>
+
+  <!-- CAIXAS -->
+  <div id="screen-caixas" class="screen">
+    <div class="case-card">
+      <h3 style="margin:0; color:#ff7700;">Caixa Operação VECTRIX</h3>
+      <p style="font-size: 0.8rem; color: #7a8b9e;">Preço: 100 Moedas</p>
+
+      <div class="roulette-container">
+        <div class="marker"></div>
+        <div class="roulette-track" id="track"></div>
+      </div>
+
+      <button class="btn-main" id="btn-spin" onclick="spinCase()">ABRIR CAIXA</button>
+      <div id="result" style="margin-top:10px; font-weight:bold; min-height:20px;"></div>
+    </div>
+  </div>
+
+  <!-- INVENTARIO -->
+  <div id="screen-inventario" class="screen">
+    <h3>Seu Inventário</h3>
+    <div id="inv-list" style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; width:100%; max-width:360px;"></div>
+  </div>
+
+  <script>
+    let userCoins = 1000;
+    let mySkins = [];
+
+    const skinsList = [
+      { name: "AK-47 | Neon", type: "rare-epic", rate: 30 },
+      { name: "M4A1 | Camo", type: "rare-common", rate: 60 },
+      { name: "Karambit | Gold", type: "rare-arcane", rate: 10 }
+    ];
+
+    function tab(id, btn) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+      document.getElementById('screen-' + id).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    function getRandomSkin() {
+      let r = Math.random() * 100;
+      if (r < 10) return skinsList[2];
+      if (r < 40) return skinsList[0];
+      return skinsList[1];
+    }
+
+    function spinCase() {
+      if(userCoins < 100) return alert("Moedas insuficientes!");
+      userCoins -= 100;
+      document.getElementById('coins').innerText = userCoins;
+      
+      const track = document.getElementById('track');
+      track.style.transition = 'none';
+      track.style.transform = 'translateX(0)';
+      track.innerHTML = '';
+
+      let winner = getRandomSkin();
+      for(let i=0; i<30; i++) {
+        let item = (i === 24) ? winner : getRandomSkin();
+        let div = document.createElement('div');
+        div.className = `skin-item ${item.type}`;
+        div.innerText = item.name;
+        track.appendChild(div);
+      }
+
+      setTimeout(() => {
+        track.style.transition = 'transform 4s cubic-bezier(0.1, 1, 0.1, 1)';
+        track.style.transform = `translateX(-${24 * 88 - 120}px)`;
+      }, 50);
+
+      setTimeout(() => {
+        document.getElementById('result').innerText = "Ganhou: " + winner.name;
+        mySkins.push(winner);
+        updateInv();
+      }, 4100);
+    }
+
+    function updateInv() {
+      const inv = document.getElementById('inv-list');
+      inv.innerHTML = '';
+      mySkins.forEach(s => {
+        let d = document.createElement('div');
+        d.className = `skin-item ${s.type}`;
+        d.innerText = s.name;
+        inv.appendChild(d);
+      });
+    }
+  </script>
+</body>
+</html>
